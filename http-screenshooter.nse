@@ -188,22 +188,27 @@ action = function( host, port )
   -- |     subtable1
   -- |_    subtable2
 
-  -- WhatWeb finger and shooter
+  -- Check if name resolution was ok
+  if host.targetname == nil then
+      name = host.ip
+  else
+      name = host.targetname
+  end
 
   -- screenshot filename
-  local screenshot_filename = 'nshooter-' .. host.ip .. '-' .. host.targetname .. '-' .. port.number .. '.png'
+  local screenshot_filename = 'nshooter-' .. host.ip .. '-' .. name .. '-' .. port.number .. '.png'
   -- stdnse.print_debug(1, "VAR screenshot_filename = " .. screenshot_filename)
 
   -- check if is SSL aware "https" service
   if string.match(port.service, 'https') then
       -- stdnse.print_debug(1, "VAR port.service = " .. port.service)
       -- setup command
-      cmd = "/usr/bin/gnome-web-photo -t 15 --mode=photo https://" .. host.targetname .. ":" .. port.number .. " " .. screenshot_filename .. " 2> /dev/null  >/dev/null"
+      cmd = "/usr/bin/gnome-web-photo -t 15 --mode=photo https://" .. name .. ":" .. port.number .. " " .. screenshot_filename .. " 2> /dev/null  >/dev/null"
   -- otherwise ALL try "http" as service
   else
       -- stdnse.print_debug(1, "VAR port.service = " .. port.service)
       -- stdnse.print_debug(1, "VAR port.number = " .. port.number)
-      cmd = "/usr/bin/gnome-web-photo -t 15 --mode=photo http://" .. host.targetname .. ":" .. port.number .. " " .. screenshot_filename .. " 2> /dev/null  >/dev/null"
+      cmd = "/usr/bin/gnome-web-photo -t 15 --mode=photo http://" .. name .. ":" .. port.number .. " " .. screenshot_filename .. " 2> /dev/null  >/dev/null"
       -- stdnse.print_debug(1, "VAR cmd = " .. cmd)
   end
 
